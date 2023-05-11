@@ -1,6 +1,6 @@
 let canvas;
 let context;
-let mouseDown = false;
+let drawingState = false;
 let lastX;
 let lastY;
 let strokeWidth = 3;
@@ -16,40 +16,65 @@ const setup = () => {
     canvas.addEventListener("mousedown", mouseDownHandler);
     canvas.addEventListener("mouseup", mouseUpHandler);
     canvas.addEventListener("mousemove", mouseMoveHandler);
-    canvas.addEventListener("touchstart", mouseDownHandler);
-    canvas.addEventListener("touchend", mouseUpHandler);
-    canvas.addEventListener("touchmove", mouseMoveHandler);
-    canvas.addEventListener("click", mouseClickHandler);
+    canvas.addEventListener("touchstart", touchStartHandler);
+    canvas.addEventListener("touchend", touchEndHandler);
     document.body.addEventListener("keypress", undo);
 
     context.lineWidth = strokeWidth;
     context.strokeStyle = strokeColor;
 };
 
-const mouseDownHandler = (event) => {
-    event.preventDefault();
-    lastX = getMousePos(event, 'X');
-    lastY = getMousePos(event, 'Y');
-    mouseDown = true;
+const startHandler = (x, y) => {
+    lastX = x;
+    lastY = y;
+    drawingState = true;
 }
 
-const mouseUpHandler = (event) => {
-    mouseDown = false;
-    currentPath.push([getMousePos(event, 'X'), getMousePos(event, 'Y')]);
+const endHandler = (x, y) => {
+    currentPath.push([x,y]);
     paths.push(currentPath);
     currentPath = [];
+    drawingState = false;
 }
 
-const mouseMoveHandler = (event) => {
-    if(mouseDown){
+const moveHandler = (x, y) => {
+    if(drawingState){
         currentPath.push([lastX, lastY]);
         context.beginPath();
         context.moveTo(lastX, lastY);
-        context.lineTo(getMousePos(event, 'X'), getMousePos(event, 'Y'));
+        context.lineTo(x, y);
         context.stroke();
-        lastX = getMousePos(event, 'X');
-        lastY = getMousePos(event, 'Y');
+        lastX = x;
+        lastY = y;
     }
+}
+
+const touchStartHandler = (event) => {
+    event.preventDefault();
+    startHandler(event.changedTouches.clientX, event.changedTouches.clientY);
+}
+
+const touchEndHandler = (event) => {
+    event.preventDefault();
+    endHandler(event.changedTouches.clientX, event.changedTouches.clientY);
+}
+
+const touchMoveHandler = (event) => {
+    moveHandler(event.changedTouches.clientX, event.changedTouches.clientY);
+}
+
+const mouseDownHandler = (event) => {
+    event.preventDefault();
+    startHandler(getMousePos(event, 'X'), getMousePos(event, 'Y'));
+}
+
+const mouseUpHandler = (event) => {
+    event.preventDefault();
+    endHandler(getMousePos(event, 'X'), getMousePos(event, 'Y'));
+}
+
+const mouseMoveHandler = (event) => {
+    moveHandler(getMousePos(event, 'X'), getMousePos(event, 'Y'));
 }
 
 const mouseClickHandler = (event) => {
@@ -64,7 +89,7 @@ const getMousePos = (event, key) => {
 
 const undo = () => {
     context.fillStyle = 'white';
-    context.fillRect(0, 0, 500, 500);
+    context.fillRect(0, 0, canvas.width, canvas.height);
     let undoPath = paths.pop();
     if(undoPath != undefined){
         paths.map(drawpath);
