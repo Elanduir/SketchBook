@@ -17,9 +17,9 @@ const setup = () => {
     canvas.addEventListener("mouseup", mouseUpHandler);
     canvas.addEventListener("mousemove", mouseMoveHandler);
     canvas.addEventListener("touchstart", mouseDownHandler);
-    document.body.addEventListener("touchend", mouseUpHandler);
-    document.body.addEventListener("touchmove", mouseMoveHandler);
-    document.body.addEventListener("click", mouseClickHandler);
+    canvas.addEventListener("touchend", mouseUpHandler);
+    canvas.addEventListener("touchmove", mouseMoveHandler);
+    canvas.addEventListener("click", mouseClickHandler);
     document.body.addEventListener("keypress", undo);
 
     context.lineWidth = strokeWidth;
@@ -27,6 +27,7 @@ const setup = () => {
 };
 
 const mouseDownHandler = (event) => {
+    event.preventDefault();
     lastX = getMousePos(event, 'X');
     lastY = getMousePos(event, 'Y');
     mouseDown = true;
