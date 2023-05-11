@@ -19,7 +19,6 @@ const setup = () => {
   strokeColor = picker.value;
   // @ts-ignore
   context = canvas.getContext("2d");
-  console.log(strokeColor);
 
   drawAgent = DrawUtil(strokeColor);
   model = SketchModel(drawAgent);

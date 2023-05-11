@@ -4,6 +4,7 @@ export { Handlers };
 
 let model;
 let drawingState = false;
+let drawingMode;
 
 const Handlers = (mod) => {
   model = mod;
@@ -26,11 +27,16 @@ const setupHandlers = () => {
   let btnUndo = document.getElementById("undo");
   let btnClear = document.getElementById("clear");
   let colPick = document.getElementById("strokeColorPicker");
+  let drawingToggle = document.getElementById("drawingToggle");
+  drawingMode = drawingToggle.checked;
 
   btnRedo.addEventListener("click", model.redo);
   btnUndo.addEventListener("click", model.undo);
   btnClear.addEventListener("click", model.clearAll);
   colPick.addEventListener("change", model.updateColor);
+  drawingToggle.addEventListener("change", (event) => {
+    drawingMode = drawingToggle.checked;
+  });
 };
 
 const startHandler = (x, y) => {
@@ -50,26 +56,31 @@ const moveHandler = (x, y) => {
 };
 
 const touchStartHandler = (event) => {
+  if (!drawingMode) return;
+  if (event.touches.length > 1) return;
   event.preventDefault();
-  let x = getActualPos(event.changedTouches[0].pageX, "X");
-  let y = getActualPos(event.changedTouches[0].pageY, "Y");
+  let x = getActualPos(event.changedTouches[0].clientX, "X");
+  let y = getActualPos(event.changedTouches[0].clientY, "Y");
   startHandler(x, y);
 };
 
 const touchEndHandler = (event) => {
+  if (!drawingMode) return;
   event.preventDefault();
-  let x = getActualPos(event.changedTouches[0].pageX, "X");
-  let y = getActualPos(event.changedTouches[0].pageY, "Y");
+  let x = getActualPos(event.changedTouches[0].clientX, "X");
+  let y = getActualPos(event.changedTouches[0].clientY, "Y");
   endHandler(x, y);
 };
 
 const touchMoveHandler = (event) => {
-  let x = getActualPos(event.changedTouches[0].pageX, "X");
-  let y = getActualPos(event.changedTouches[0].pageY, "Y");
+  if (!drawingMode) return;
+  let x = getActualPos(event.changedTouches[0].clientX, "X");
+  let y = getActualPos(event.changedTouches[0].clientY, "Y");
   moveHandler(x, y);
 };
 
 const mouseDownHandler = (event) => {
+  if (!drawingMode) return;
   event.preventDefault();
   let x = getActualPos(event.clientX, "X");
   let y = getActualPos(event.clientY, "Y");
@@ -77,6 +88,7 @@ const mouseDownHandler = (event) => {
 };
 
 const mouseUpHandler = (event) => {
+  if (!drawingMode) return;
   event.preventDefault();
   let x = getActualPos(event.clientX, "X");
   let y = getActualPos(event.clientY, "Y");
@@ -84,6 +96,7 @@ const mouseUpHandler = (event) => {
 };
 
 const mouseMoveHandler = (event) => {
+  if (!drawingMode) return;
   let x = getActualPos(event.clientX, "X");
   let y = getActualPos(event.clientY, "Y");
   moveHandler(x, y);
