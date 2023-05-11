@@ -2,15 +2,15 @@
 <html>
     <head>
         <link rel="stylesheet" href="./src/style.css">
-        <script src="./src/SketchBook.js" defer></script>
+        <script src="./src/SketchBook.js" type="module"></script>
     </head>
     <body>
         <div id="controls">
             <input type="text" placeholder="Title: new sketch">    
-            <input type="color" onchange="updateColor()" value="#000000" id="strokeColorPicker">
-            <input type="button" onclick="redraw(true)" value="UNDO">
-            <input type="button" onclick="redo()" value="REDO">
-            <input type="button" onclick="clearAll()" value="CLEAR ALL">
+            <input type="color" value="#000000" id="strokeColorPicker">
+            <input type="button" value="UNDO" id="undo">
+            <input type="button" value="REDO" id="redo">
+            <input type="button" value="CLEAR ALL" id="clear">
         </div>
         <div id="drawing">
             <canvas id="note" width="500" height="500">
