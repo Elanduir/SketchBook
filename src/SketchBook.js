@@ -13,11 +13,15 @@ const setup = () => {
     canvas = document.getElementById("note");
     context = canvas.getContext("2d");
 
+    canvas.width = window.innerWidth *.9;
+    canvas.height = window.innerHeight *.9;
+
     canvas.addEventListener("mousedown", mouseDownHandler);
     canvas.addEventListener("mouseup", mouseUpHandler);
     canvas.addEventListener("mousemove", mouseMoveHandler);
     canvas.addEventListener("touchstart", touchStartHandler);
     canvas.addEventListener("touchend", touchEndHandler);
+    canvas.addEventListener("touchmove", touchMoveHandler);
     document.body.addEventListener("keypress", undo);
 
     context.lineWidth = strokeWidth;
@@ -51,16 +55,16 @@ const moveHandler = (x, y) => {
 
 const touchStartHandler = (event) => {
     event.preventDefault();
-    startHandler(event.changedTouches.clientX, event.changedTouches.clientY);
+    startHandler(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
 }
 
 const touchEndHandler = (event) => {
     event.preventDefault();
-    endHandler(event.changedTouches.clientX, event.changedTouches.clientY);
+    endHandler(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
 }
 
 const touchMoveHandler = (event) => {
-    moveHandler(event.changedTouches.clientX, event.changedTouches.clientY);
+    moveHandler(event.touches[0].pageX, event.touches[0].pageY);
 }
 
 const mouseDownHandler = (event) => {
