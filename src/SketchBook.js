@@ -15,6 +15,7 @@ let strokeColor;
 const setup = () => {
   canvas = document.getElementById("note");
   let picker = document.getElementById("strokeColorPicker");
+  // @ts-ignore
   strokeColor = picker.value;
   // @ts-ignore
   context = canvas.getContext("2d");

@@ -1,5 +1,5 @@
 //@ts-check
-import { getMousePos } from "./Util.js";
+import { getActualPos } from "./Util.js";
 export { Handlers };
 
 let model;
@@ -51,30 +51,42 @@ const moveHandler = (x, y) => {
 
 const touchStartHandler = (event) => {
   event.preventDefault();
-  startHandler(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+  let x = getActualPos(event.changedTouches[0].pageX, "X");
+  let y = getActualPos(event.changedTouches[0].pageY, "Y");
+  startHandler(x, y);
 };
 
 const touchEndHandler = (event) => {
   event.preventDefault();
-  endHandler(event.changedTouches[0].pageX, event.changedTouches[0].pageY);
+  let x = getActualPos(event.changedTouches[0].pageX, "X");
+  let y = getActualPos(event.changedTouches[0].pageY, "Y");
+  endHandler(x, y);
 };
 
 const touchMoveHandler = (event) => {
-  moveHandler(event.touches[0].pageX, event.touches[0].pageY);
+  let x = getActualPos(event.changedTouches[0].pageX, "X");
+  let y = getActualPos(event.changedTouches[0].pageY, "Y");
+  moveHandler(x, y);
 };
 
 const mouseDownHandler = (event) => {
   event.preventDefault();
-  startHandler(getMousePos(event, "X"), getMousePos(event, "Y"));
+  let x = getActualPos(event.clientX, "X");
+  let y = getActualPos(event.clientY, "Y");
+  startHandler(x, y);
 };
 
 const mouseUpHandler = (event) => {
   event.preventDefault();
-  endHandler(getMousePos(event, "X"), getMousePos(event, "Y"));
+  let x = getActualPos(event.clientX, "X");
+  let y = getActualPos(event.clientY, "Y");
+  endHandler(x, y);
 };
 
 const mouseMoveHandler = (event) => {
-  moveHandler(getMousePos(event, "X"), getMousePos(event, "Y"));
+  let x = getActualPos(event.clientX, "X");
+  let y = getActualPos(event.clientY, "Y");
+  moveHandler(x, y);
 };
 
 const mouseClickHandler = (event) => {

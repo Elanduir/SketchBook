@@ -1,9 +1,9 @@
 //@ts-check
-export { getMousePos };
+export { getActualPos };
 
-const getMousePos = (event, key) => {
+const getActualPos = (x, key) => {
   let canvas = document.getElementById("note");
   let bounding = canvas.getBoundingClientRect();
-  if (key === "X") return event.clientX - bounding.left;
-  if (key === "Y") return event.clientY - bounding.top;
+  if (key === "X") return x - bounding.left;
+  if (key === "Y") return x - bounding.top;
 };
