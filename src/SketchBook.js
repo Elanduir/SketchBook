@@ -3,7 +3,7 @@ let context;
 let drawingState = false;
 let lastX;
 let lastY;
-let strokeWidth = 3;
+let strokeWidth = 2;
 let strokeColor = 'black';
 let mode = 'draw';
 let paths = [];
@@ -22,13 +22,15 @@ const setup = () => {
     canvas.addEventListener("touchstart", touchStartHandler);
     canvas.addEventListener("touchend", touchEndHandler);
     canvas.addEventListener("touchmove", touchMoveHandler);
-    document.body.addEventListener("keypress", undo);
+    document.body.addEventListener("keypress", () => redraw(true));
 
     context.lineWidth = strokeWidth;
     context.strokeStyle = strokeColor;
 };
 
 const startHandler = (x, y) => {
+    currentPath = [];
+    currentPath.push([x,y]);
     lastX = x;
     lastY = y;
     drawingState = true;
@@ -39,11 +41,12 @@ const endHandler = (x, y) => {
     paths.push(currentPath);
     currentPath = [];
     drawingState = false;
+    redraw(false);
 }
 
 const moveHandler = (x, y) => {
     if(drawingState){
-        currentPath.push([lastX, lastY]);
+        currentPath.push([x, y]);
         context.beginPath();
         context.moveTo(lastX, lastY);
         context.lineTo(x, y);
@@ -91,36 +94,34 @@ const getMousePos = (event, key) => {
     if(key === 'Y') return event.clientY - bounding.top;
 }
 
-const undo = () => {
+const redraw = (remove) => {
     context.fillStyle = 'white';
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    let undoPath = paths.pop();
-    if(undoPath != undefined){
-        paths.map(drawpath);
+    context.fillRect(0, 0, 10000, 10000);
+    if(remove){
+        paths.pop();
     }
+    paths.map(drawSmooth);
 }
 
-const drawpath = (path) => {
-    context.strokeStyle = strokeColor;
-    if(path.length < 1) return;
+const drawSmooth = (path) => {
+    if(path.length < 0) return;
     let startX = path[0][0];
     let startY = path[0][1];
     if(path.length === 1) {
         context.fillRect(startX, startY, strokeWidth, strokeWidth);
         return;
     }
-
-    for(let i = 1; i < path.length; i++){
-        let endX = path[i][0];
-        let endY = path[i][1];
-        context.beginPath();
-        context.moveTo(startX, startY);
-        context.lineTo(endX, endY);
-        context.stroke();
-        startX = endX;
-        startY = endY;
+    context.beginPath();
+    context.moveTo(startX, startY);
+    for(let i = 1; i < path.length - 1; i++){
+        let endX = (path[i][0] + path[i+1][0]) / 2;
+        let endY = (path[i][1] + path[i+1][1]) / 2;
+        let controlX = path[i][0];
+        let controlY = path[i][1];
+        context.quadraticCurveTo(controlX, controlY, endX, endY);
+        
     }
-
+    context.stroke();
 }
 
 setup();
