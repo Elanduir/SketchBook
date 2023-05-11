@@ -101,6 +101,8 @@ const redraw = (remove) => {
     if(remove){
         redoPaths.push(paths.pop());    
     }
+    if(paths.length === 0) return;
+    paths = paths.filter(e => e != undefined);
     paths.map(drawSmooth);
 }
 
@@ -126,7 +128,18 @@ const drawSmooth = (path) => {
 }
 
 const redo = () => {
-    paths.push(redoPaths.pop());
+    if(redoPaths.length === 0) return;
+    let rP = redoPaths.pop();
+    if(rP != undefined) paths.push(rP);
+    redraw(false);
+}
+
+const clearAll = () => {
+    if(paths.length === 0) return;
+    while(paths.length > 0){
+        let rP = paths.pop();
+        if(rP != undefined)redoPaths.push(rP);
+    }
     redraw(false);
 }
 
