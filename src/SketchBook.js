@@ -27,6 +27,8 @@ const setup = () => {
 
     context.lineWidth = strokeWidth;
     context.strokeStyle = strokeColor;
+
+    updateColor();
 };
 
 const startHandler = (x, y) => {
@@ -39,7 +41,7 @@ const startHandler = (x, y) => {
 
 const endHandler = (x, y) => {
     currentPath.push([x,y]);
-    paths.push(currentPath);
+    paths.push([currentPath, strokeColor]);
     currentPath = [];
     drawingState = false;
     redraw(false);
@@ -106,7 +108,10 @@ const redraw = (remove) => {
     paths.map(drawSmooth);
 }
 
-const drawSmooth = (path) => {
+const drawSmooth = (pathObj) => {
+    let path = pathObj[0];
+    let color = pathObj[1];
+    context.strokeStyle = color;
     if(path.length < 0) return;
     let startX = path[0][0];
     let startY = path[0][1];
@@ -141,6 +146,12 @@ const clearAll = () => {
         if(rP != undefined)redoPaths.push(rP);
     }
     redraw(false);
+}
+
+const updateColor = () => {
+    let colorPicker = document.getElementById("strokeColorPicker");
+    strokeColor = colorPicker.value;
+    context.strokeStyle = strokeColor;
 }
 
 setup();

@@ -7,6 +7,7 @@
     <body>
         <div id="controls">
             <input type="text" placeholder="Title: new sketch">    
+            <input type="color" onchange="updateColor()" value="#000000" id="strokeColorPicker">
             <input type="button" onclick="redraw(true)" value="UNDO">
             <input type="button" onclick="redo()" value="REDO">
             <input type="button" onclick="clearAll()" value="CLEAR ALL">
