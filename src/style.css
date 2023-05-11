@@ -1,7 +1,16 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+}
 body {
     background-color: #f0f0f0;
 }
 
-canvas {
+#drawing {
+    display: flex;
+    justify-content: center;
+    align-items:  center;
+}
+#note {
     background-color: white;
 }

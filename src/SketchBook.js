@@ -7,14 +7,15 @@ let strokeWidth = 2;
 let strokeColor = 'black';
 let mode = 'draw';
 let paths = [];
+let redoPaths = [];
 let currentPath = [];
 
 const setup = () => {
     canvas = document.getElementById("note");
     context = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth *.9;
-    canvas.height = window.innerHeight *.9;
+    canvas.width = window.innerWidth-50;
+    canvas.height = window.innerHeight-50;
 
     canvas.addEventListener("mousedown", mouseDownHandler);
     canvas.addEventListener("mouseup", mouseUpHandler);
@@ -98,7 +99,7 @@ const redraw = (remove) => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, 10000, 10000);
     if(remove){
-        paths.pop();
+        redoPaths.push(paths.pop());    
     }
     paths.map(drawSmooth);
 }
@@ -122,6 +123,11 @@ const drawSmooth = (path) => {
         
     }
     context.stroke();
+}
+
+const redo = () => {
+    paths.push(redoPaths.pop());
+    redraw(false);
 }
 
 setup();

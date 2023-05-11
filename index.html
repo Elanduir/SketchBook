@@ -5,7 +5,15 @@
         <script src="./src/SketchBook.js" defer></script>
     </head>
     <body>
-        <canvas id="note" width="500" height="500">
+        <div id="controls">
+            <input type="text" placeholder="Title: new sketch">    
+            <input type="button" onclick="redraw(true)" value="UNDO">
+            <input type="button" onclick="redo()" value="REDO">
+        </div>
+        <div id="drawing">
+            <canvas id="note" width="500" height="500">
+        </div>
+        
         </canvas>
     </body>
 </html>
