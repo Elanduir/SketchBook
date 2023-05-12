@@ -1,16 +1,23 @@
-html, body {
-    margin: 0px;
-    padding: 0px;
+html,
+body {
+  margin: 0px;
+  padding: 0px;
 }
 body {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 #drawing {
-    display: flex;
-    justify-content: center;
-    align-items:  center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #note {
-    background-color: white;
+  background-color: white;
+}
+
+#controls {
+  position: sticky;
+  right: 10px;
+  bottom: 10px;
 }

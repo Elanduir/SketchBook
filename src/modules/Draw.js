@@ -1,29 +1,36 @@
 //@ts-check
 
-import { SketchModel } from "./SketchModel.js";
-
 export { DrawUtil };
 
 let context;
 let canvas;
 let strokeWidth = 3;
 let strokeColor;
+let xC = 0;
+let yC = 0;
 
 const DrawUtil = (initColor) => {
   canvas = document.getElementById("note");
   // @ts-ignore
   context = canvas.getContext("2d");
   updateColor(initColor);
+
+  xC = canvas.width / 2;
+  yC = canvas.height / 2;
+
   return {
     redraw,
     drawPath: drawSmooth,
     drawCurrent,
     getColor,
     updateColor,
+    getCenter: () => [xC, yC],
   };
 };
 
-const redraw = (paths, remove) => {
+const redraw = (paths) => {
+  xC = canvas.width / 2;
+  yC = canvas.height / 2;
   context.fillStyle = "white";
   context.fillRect(0, 0, 10000, 10000);
   paths.map(drawSmooth);

@@ -7,6 +7,8 @@ let redoPaths = [];
 let currentPath = [];
 let drawAgent;
 let initX, initY;
+let xOffT = 0;
+let yOffT = 0;
 
 const SketchModel = (draw) => {
   drawAgent = draw;
@@ -20,6 +22,9 @@ const SketchModel = (draw) => {
     redo,
     clearAll,
     updateColor,
+    managePan,
+    resetPan,
+    manageZoom,
   };
 };
 
@@ -75,4 +80,44 @@ const clearAll = () => {
 
 const updateColor = (event) => {
   drawAgent.updateColor(event.target.value);
+};
+
+const managePan = (x, y) => {
+  xOffT += x;
+  yOffT += y;
+  updateOffset(x, y);
+  drawAgent.redraw(paths);
+};
+
+const updateOffset = (x, y) => {
+  paths.map((path) =>
+    path[0].map((c) => {
+      c[0] += x;
+      c[1] += y;
+    })
+  );
+};
+
+// TODO: Seems not to work
+const resetPan = () => {
+  updateOffset(-xOffT, -yOffT);
+  drawAgent.redraw(paths);
+};
+
+const manageZoom = (factor) => {
+  zoom(factor);
+  drawAgent.redraw(paths);
+};
+
+const zoom = (factor) => {
+  let xC, yC;
+  [xC, yC] = drawAgent.getCenter();
+  paths.map((path) => {
+    path[0].map((c) => {
+      let xV = (c[0] - xC) * factor;
+      let yV = (c[1] - yC) * factor;
+      c[0] = xC + xV;
+      c[1] = yC + yV;
+    });
+  });
 };
