@@ -24,7 +24,7 @@ const setupHandlers = () => {
   canvas.addEventListener("touchend", touchEndHandler);
   canvas.addEventListener("touchmove", touchMoveHandler);
   canvas.addEventListener("wheel", (event) => {
-    let factor = event.deltaY > 0 ? 1.1 : 0.9;
+    let factor = event.deltaY < 0 ? 1.1 : 0.9;
     event.preventDefault();
     model.manageZoom(factor);
   });
