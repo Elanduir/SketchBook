@@ -2,6 +2,7 @@
 import { DrawUtil } from "./modules/Draw.js";
 import { Handlers } from "./modules/Handlers.js";
 import { SketchModel } from "./modules/SketchModel.js";
+import { setCookie } from "./modules/Util.js";
 
 let canvas;
 let context;
