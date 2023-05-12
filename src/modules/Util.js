@@ -1,9 +1,8 @@
 //@ts-check
-export { getActualPos };
+export { getActualPositions };
 
-const getActualPos = (x, key) => {
+const getActualPositions = (x, y) => {
   let canvas = document.getElementById("note");
   let bounding = canvas.getBoundingClientRect();
-  if (key === "X") return x - bounding.left;
-  if (key === "Y") return x - bounding.top;
+  return [x - bounding.left, y - bounding.top];
 };
