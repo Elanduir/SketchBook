@@ -8,7 +8,11 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
-        <input type="text" id="title" placeholder="Title: new sketch">  
+        <div id="headControls">
+            <input type="text" id="title" placeholder="Title: new sketch">  
+            <select name="sketches" id="sketchSelect"></select>
+        </div>
+        
         <div id="controls">  
             <p></p>
             <input type="button" value="CLEAR ALL" id="clear">
@@ -16,6 +20,8 @@
             <input type="button" value="UNDO" id="undo">
             <input type="color" value="#000000" id="strokeColorPicker">
             <input type="button" value="REDO" id="redo">
+            <p></p>
+            <input type="button" value="CREATE" id="create">
         </div>
         <div id="drawing">
             <canvas id="note" width="500" height="500">
