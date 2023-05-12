@@ -110,10 +110,12 @@ const moveHandler = (event) => {
     if (Math.abs(delta) > 10) {
       let factor = delta > 0 ? 1.05 : 0.95;
       handleZoom(factor);
-    } else {
-      let pP = activePointers.filter((p) => p.pointerId == panPointerID)[0];
-      let aX = getActualPos(pP.clientX, "X");
-      let aY = getActualPos(pP.clientY, "Y");
+    }
+    let pP = activePointers.filter((p) => p.pointerId == panPointerID)[0];
+    let aX = getActualPos(pP.clientX, "X");
+    let aY = getActualPos(pP.clientY, "Y");
+    let pan = Math.abs(startX - aX) > 10 || Math.abs(startY - aY) > 10;
+    if (pan) {
       panHandler(aX, aY);
     }
 
