@@ -22,18 +22,19 @@ body {
 #title {
   top: 10px;
   left: 10px;
-  font-size: 1.5em;
+  font-size: 16px;
+  font-size: max(16px, 1.5em);
   border-radius: 0;
   border: none;
   border-bottom: 1px solid slategray;
 }
 
 #controls {
-  bottom: 50px;
-  right: 50px;
+  bottom: 1em;
+  right: 1em;
   display: grid;
   grid-template-columns: auto auto auto;
-  gap: 10px;
+  gap: 0.2em;
 }
 
 #clear,
