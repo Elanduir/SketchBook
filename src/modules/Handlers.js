@@ -4,10 +4,12 @@ export { Handlers };
 
 let model;
 let drawingState = false;
-let drawingMode;
 let panState = false;
 let startX;
 let startY;
+let activePointers = [];
+let distanceBetweenPointers = 0;
+let panPointerID = "";
 
 const Handlers = (mod) => {
   model = mod;
@@ -17,32 +19,24 @@ const Handlers = (mod) => {
 
 const setupHandlers = () => {
   let canvas = document.getElementById("note");
-  canvas.addEventListener("mousedown", mouseDownHandler);
-  canvas.addEventListener("mouseup", mouseUpHandler);
-  canvas.addEventListener("mousemove", mouseMoveHandler);
-  canvas.addEventListener("touchstart", touchStartHandler);
-  canvas.addEventListener("touchend", touchEndHandler);
-  canvas.addEventListener("touchmove", touchMoveHandler);
+  canvas.addEventListener("pointerdown", startHandler);
+  canvas.addEventListener("pointerup", endHandler);
+  canvas.addEventListener("pointermove", moveHandler);
   canvas.addEventListener("wheel", (event) => {
     let factor = event.deltaY < 0 ? 1.1 : 0.9;
     event.preventDefault();
-    model.manageZoom(factor);
+    handleZoom(factor);
   });
 
   let btnRedo = document.getElementById("redo");
   let btnUndo = document.getElementById("undo");
   let btnClear = document.getElementById("clear");
   let colPick = document.getElementById("strokeColorPicker");
-  let drawingToggle = document.getElementById("drawingToggle");
-  drawingMode = drawingToggle.checked;
 
   btnRedo.addEventListener("click", model.redo);
   btnUndo.addEventListener("click", model.undo);
   btnClear.addEventListener("click", model.clearAll);
   colPick.addEventListener("change", model.updateColor);
-  drawingToggle.addEventListener("change", (event) => {
-    drawingMode = drawingToggle.checked;
-  });
 };
 
 const panHandler = (x, y) => {
@@ -53,78 +47,86 @@ const panHandler = (x, y) => {
   model.managePan(xO, yO);
 };
 
-const startHandler = (x, y) => {
+const startHandler = (event) => {
+  event.preventDefault();
+  activePointers.push(event);
+  if (panPointerID === "") panPointerID = event.pointerId;
+
+  let x = getActualPos(activePointers[0].clientX, "X");
+  let y = getActualPos(activePointers[0].clientY, "Y");
+  startX = x;
+  startY = y;
+
+  if (activePointers.length > 1) {
+    let p1 = activePointers[0];
+    let p2 = activePointers[1];
+    distanceBetweenPointers = Math.sqrt(
+      Math.pow(p1.clientX - p2.clientX, 2) +
+        Math.pow(p1.clientY - p2.clientY, 2)
+    );
+    console.log(distanceBetweenPointers);
+  }
+
+  panState = event.shiftKey;
+  if (panState) return;
+  event.preventDefault();
   model.initCurrent(x, y);
   drawingState = true;
 };
 
-const endHandler = (x, y) => {
+const endHandler = (event) => {
+  panState = false;
+  activePointers = activePointers.filter((e) => e.pointerId != event.pointerId);
+  console.log(activePointers);
+  event.preventDefault();
+  let x = getActualPos(event.clientX, "X");
+  let y = getActualPos(event.clientY, "Y");
+
   model.endCurrent(x, y);
   drawingState = false;
+  panPointerID = "";
 };
 
-const moveHandler = (x, y) => {
+const drawHandler = (x, y) => {
   if (drawingState) {
     model.addCurrent(x, y);
   }
 };
 
-const touchStartHandler = (event) => {
-  event.preventDefault();
-  let x = getActualPos(event.changedTouches[0].clientX, "X");
-  let y = getActualPos(event.changedTouches[0].clientY, "Y");
-  startX = x;
-  startY = y;
-  if (!drawingMode || panState) return;
-  startHandler(x, y);
-};
+const moveHandler = (event) => {
+  let x = getActualPos(event.clientX, "X");
+  let y = getActualPos(event.clientY, "Y");
+  activePointers = activePointers.filter((e) => e.pointerId != event.pointerId);
+  activePointers.push(event);
+  if (activePointers.length > 1) {
+    let p1 = activePointers[0];
+    let p2 = activePointers[1];
+    let cDist = Math.sqrt(
+      Math.pow(p1.clientX - p2.clientX, 2) +
+        Math.pow(p1.clientY - p2.clientY, 2)
+    );
+    let delta = cDist - distanceBetweenPointers;
+    distanceBetweenPointers = cDist;
+    if (Math.abs(delta) > 10) {
+      let factor = delta > 0 ? 1.05 : 0.95;
+      handleZoom(factor);
+    } else {
+      let pP = activePointers.filter((p) => p.pointerId == panPointerID)[0];
+      let aX = getActualPos(pP.clientX, "X");
+      let aY = getActualPos(pP.clientY, "Y");
+      panHandler(aX, aY);
+    }
 
-const touchEndHandler = (event) => {
-  if (!drawingMode) return;
-  event.preventDefault();
-  let x = getActualPos(event.changedTouches[0].clientX, "X");
-  let y = getActualPos(event.changedTouches[0].clientY, "Y");
-  endHandler(x, y);
-};
-
-const touchMoveHandler = (event) => {
-  event.preventDefault();
-  let x = getActualPos(event.changedTouches[0].clientX, "X");
-  let y = getActualPos(event.changedTouches[0].clientY, "Y");
-  if (!drawingMode) {
-    panHandler(x, y);
-  } else {
-    moveHandler(x, y);
+    return;
   }
-};
 
-const mouseDownHandler = (event) => {
-  panState = event.shiftKey;
-  let x = getActualPos(event.clientX, "X");
-  let y = getActualPos(event.clientY, "Y");
-  startX = x;
-  startY = y;
-  if (!drawingMode || panState) return;
-  event.preventDefault();
-  startHandler(x, y);
-};
-
-const mouseUpHandler = (event) => {
-  panState = false;
-  if (!drawingMode) return;
-  event.preventDefault();
-  let x = getActualPos(event.clientX, "X");
-  let y = getActualPos(event.clientY, "Y");
-  endHandler(x, y);
-};
-
-const mouseMoveHandler = (event) => {
-  if (!drawingMode) return;
-  let x = getActualPos(event.clientX, "X");
-  let y = getActualPos(event.clientY, "Y");
   if (panState) {
     panHandler(x, y);
   } else {
-    moveHandler(x, y);
+    drawHandler(x, y);
   }
+};
+
+const handleZoom = (factor) => {
+  model.manageZoom(factor);
 };

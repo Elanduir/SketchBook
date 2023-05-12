@@ -1,7 +1,9 @@
 html,
 body {
+  touch-action: none;
   margin: 0px;
   padding: 0px;
+  user-select: none;
 }
 body {
   background-color: #f0f0f0;
@@ -14,6 +16,7 @@ body {
 }
 #note {
   background-color: white;
+  user-select: none;
 }
 
 #controls {

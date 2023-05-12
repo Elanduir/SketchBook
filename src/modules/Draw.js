@@ -25,6 +25,7 @@ const DrawUtil = (initColor) => {
     getColor,
     updateColor,
     getCenter: () => [xC, yC],
+    getStokeWidth: () => strokeWidth,
   };
 };
 
