@@ -94,6 +94,7 @@ const drawHandler = (x, y) => {
 };
 
 const moveHandler = (event) => {
+  const SENSITIVITY = 10;
   let x = getActualPos(event.clientX, "X");
   let y = getActualPos(event.clientY, "Y");
   activePointers = activePointers.filter((e) => e.pointerId != event.pointerId);
@@ -107,14 +108,16 @@ const moveHandler = (event) => {
     );
     let delta = cDist - distanceBetweenPointers;
     distanceBetweenPointers = cDist;
-    if (Math.abs(delta) > 10) {
+    if (Math.abs(delta) > SENSITIVITY) {
       let factor = delta > 0 ? 1.05 : 0.95;
       handleZoom(factor);
     }
     let pP = activePointers.filter((p) => p.pointerId == panPointerID)[0];
     let aX = getActualPos(pP.clientX, "X");
     let aY = getActualPos(pP.clientY, "Y");
-    let pan = Math.abs(startX - aX) > 10 || Math.abs(startY - aY) > 10;
+    let pan =
+      Math.abs(startX - aX) > SENSITIVITY ||
+      Math.abs(startY - aY) > SENSITIVITY;
     if (pan) {
       panHandler(aX, aY);
     }
