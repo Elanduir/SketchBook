@@ -25,9 +25,9 @@ const setup = () => {
   let handlers = Handlers(model);
 
   // @ts-ignore
-  canvas.width = window.innerWidth - 50;
+  canvas.width = window.innerWidth;
   // @ts-ignore
-  canvas.height = window.innerHeight - 50;
+  canvas.height = window.innerHeight;
 
   context.lineWidth = strokeWidth;
 };

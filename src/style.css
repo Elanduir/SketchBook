@@ -14,18 +14,17 @@ body {
   background-color: #f0f0f0;
 }
 
-#drawing {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#note {
-  background-color: white;
-  touch-action: none;
+#title,
+#controls {
+  position: absolute;
 }
 
 #controls {
-  position: sticky;
-  right: 10px;
   bottom: 10px;
+  right: 10px;
+}
+
+#note {
+  background-color: white;
+  touch-action: none;
 }
