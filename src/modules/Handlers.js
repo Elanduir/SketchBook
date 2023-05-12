@@ -26,6 +26,10 @@ const setupHandlers = () => {
     let factor = event.deltaY < 0 ? 1.1 : 0.9;
     event.preventDefault();
     handleZoom(factor);
+    model.updateZoomLoc(
+      getActualPos(event.clientX, "X"),
+      getActualPos(event.clientY, "Y")
+    );
   });
 
   let btnRedo = document.getElementById("redo");
@@ -60,6 +64,11 @@ const startHandler = (event) => {
   if (activePointers.length > 1) {
     let p1 = activePointers[0];
     let p2 = activePointers[1];
+    let mx =
+      (getActualPos(p1.clientX, "X") + getActualPos(p2.clientX, "X")) / 2;
+    let my =
+      (getActualPos(p1.clientY, "Y") + getActualPos(p2.clientY, "Y")) / 2;
+    model.updateZoomLoc(mx, my);
     distanceBetweenPointers = Math.sqrt(
       Math.pow(p1.clientX - p2.clientX, 2) +
         Math.pow(p1.clientY - p2.clientY, 2)

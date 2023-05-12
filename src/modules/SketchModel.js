@@ -25,6 +25,7 @@ const SketchModel = (draw) => {
     managePan,
     resetPan,
     manageZoom,
+    updateZoomLoc,
   };
 };
 
@@ -121,3 +122,5 @@ const zoom = (factor) => {
     });
   });
 };
+
+const updateZoomLoc = (x, y) => drawAgent.updateZoomLoc(x, y);

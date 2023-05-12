@@ -6,8 +6,8 @@ let context;
 let canvas;
 let strokeWidth = 3;
 let strokeColor;
-let xC = 0;
-let yC = 0;
+let xZ = 0;
+let yZ = 0;
 
 const DrawUtil = (initColor) => {
   canvas = document.getElementById("note");
@@ -15,23 +15,19 @@ const DrawUtil = (initColor) => {
   context = canvas.getContext("2d");
   updateColor(initColor);
 
-  xC = canvas.width / 2;
-  yC = canvas.height / 2;
-
   return {
     redraw,
     drawPath: drawSmooth,
     drawCurrent,
     getColor,
     updateColor,
-    getCenter: () => [xC, yC],
+    getCenter: () => [xZ, yZ],
     getStokeWidth: () => strokeWidth,
+    updateZoomLoc,
   };
 };
 
 const redraw = (paths) => {
-  xC = canvas.width / 2;
-  yC = canvas.height / 2;
   context.fillStyle = "white";
   context.fillRect(0, 0, 10000, 10000);
   paths.map(drawSmooth);
@@ -74,3 +70,8 @@ const updateColor = (color) => {
 };
 
 const getColor = () => strokeColor;
+
+const updateZoomLoc = (x, y) => {
+  xZ = x;
+  yZ = y;
+};
