@@ -31,9 +31,7 @@ const Initialize = () => {
   canvas.addEventListener("pointerdown", startHandler);
   canvas.addEventListener("pointerup", endHandler);
   canvas.addEventListener("pointermove", moveHandler);
-  //canvas.addEventListener("pointercancel", endHandler);
-  //canvas.addEventListener("pointerleave", endHandler);
-  //canvas.addEventListener("pointerout", endHandler);
+  canvas.addEventListener("pointerleave", endHandler);
   canvas.addEventListener("touchstart", touchStartHandler);
   canvas.addEventListener("touchend", touchEndHandler);
   canvas.addEventListener("touchmove", touchMoveHandler);
@@ -58,6 +56,10 @@ const Initialize = () => {
   btnRedo.addEventListener("click", scratchHandler.redo);
   btnUndo.addEventListener("click", scratchHandler.undo);
   btnClear.addEventListener("click", scratchHandler.clear);
+
+  colPick.addEventListener("change", (event) => {
+    scratchHandler.updateColor(event.target.value);
+  });
 
   sketchTitle.addEventListener("change", (e) =>
     scratchHandler.setTitle(e.target.value)

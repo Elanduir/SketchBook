@@ -119,6 +119,7 @@ const ScratchHandler = () => {
     addPathToActive,
     addToCurrentPath,
     endCurrentPath,
+    updateColor,
     pan,
     zoom,
     undo: () => {
