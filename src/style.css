@@ -19,6 +19,10 @@ body {
   position: absolute;
 }
 
+#headControls {
+  width: 100%;
+}
+
 #title {
   top: 10px;
   left: 10px;
@@ -27,6 +31,7 @@ body {
   border-radius: 0;
   border: none;
   border-bottom: 1px solid slategray;
+  width: 40%;
 }
 
 #controls {

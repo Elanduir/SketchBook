@@ -33,7 +33,7 @@ const setup = () => {
 
   drawAgent = DrawUtil(strokeColor);
   model = SketchModel(drawAgent);
-  let handlers = Handlers(model);
+  //let handlers = Handlers(model);
 
   // ------------- REWORK -------------
   init = Initialize();
