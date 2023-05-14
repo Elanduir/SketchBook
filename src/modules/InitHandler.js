@@ -69,6 +69,9 @@ const Initialize = () => {
   sketchSelector.addEventListener("change", (e) =>
     scratchHandler.setActiveByName(e.target.value)
   );
+
+  // set initial color
+  scratchHandler.updateColor(colPick.value);
 };
 
 const updateTitle = (model) => {
@@ -198,6 +201,7 @@ const endHandler = (event) => {
   activePointers = activePointers.filter((e) => e.pointerId != event.pointerId);
   let x, y;
   [x, y] = getActualPositions(event.clientX, event.clientY);
+  if (!drawingState) return;
   scratchHandler.endCurrentPath(x, y);
   drawingState = false;
   panPointerID = "";
@@ -224,6 +228,8 @@ const touchEndHandler = (event) => {
     event.changedTouches[0].cleintX,
     event.changedTouches[0].clientY
   );
+  if (!drawingState) return;
+  drawingState = false;
   scratchHandler.endCurrentPath(x, y);
 };
 

@@ -5,7 +5,7 @@ export { DrawUtil };
 let context;
 let canvas;
 let strokeWidth = 3;
-let strokeColor;
+let strokeColor = "black";
 let xZ = 0;
 let yZ = 0;
 
@@ -35,6 +35,7 @@ const redraw = (paths) => {
 
 const drawSmooth = (pathObj) => {
   let path = pathObj[0];
+  console.log(pathObj);
   let color = pathObj[1];
   context.strokeStyle = color;
   if (path.length < 0) return;
@@ -57,7 +58,7 @@ const drawSmooth = (pathObj) => {
 };
 
 const drawCurrent = (startX, startY, endX, endY) => {
-  updateColor(strokeColor);
+  context.strokeStyle = strokeColor;
   context.beginPath();
   context.moveTo(startX, startY);
   context.lineTo(endX, endY);
